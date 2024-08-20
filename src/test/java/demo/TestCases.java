@@ -6,12 +6,12 @@ import org.openqa.selenium.chrome.ChromeDriverService;
 import org.openqa.selenium.chrome.ChromeOptions;
 import org.openqa.selenium.logging.LogType;
 import org.openqa.selenium.logging.LoggingPreferences;
+import org.testng.Assert;
 import org.testng.annotations.AfterTest;
 import org.testng.annotations.BeforeTest;
 import org.testng.annotations.Test;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.time.Duration;
 import java.util.logging.Level;
 
 
@@ -51,6 +51,52 @@ public class TestCases {
         driver = new ChromeDriver(options);
 
         driver.manage().window().maximize();
+        driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(30));
+        System.out.println("Successfully Created Driver");
+    }
+
+    @Test
+    public void testCase01() throws InterruptedException{
+        System.out.println("Beginning Test Case 01");
+        
+        double starRating = 4.0;
+        driver.get("https://www.flipkart.com/");
+        Wrappers.enterTextWrapper(driver, By.xpath("//input[@title='Search for Products, Brands and More']"), "Washing Machine");
+        Thread.sleep(3000);
+        Wrappers.clickOnElementWapper(driver, By.xpath("//div[contains(text(),'Popularity')]"));
+        Boolean status = Wrappers.seachStarRatingAndPrintCount(driver, By.xpath("//span[contains(@id,'productRating')]/div"), starRating);
+        Assert.assertTrue(status);
+
+        System.out.println("Ending Test Case 01");
+    }
+
+    @Test
+    public void testCase02() throws InterruptedException{
+        System.out.println("Beginning Test Case 02");
+
+        int disount = 17;
+        driver.get("https://www.flipkart.com/");
+        Wrappers.enterTextWrapper(driver, By.xpath("//input[@title='Search for Products, Brands and More']"), "iPhone");
+        Thread.sleep(3000);
+        Boolean status = Wrappers.printTitleAndDiscountIphone(driver, By.xpath("//div[contains(@class,'yKfJKb')]"), 17);
+        Assert.assertTrue(status);
+
+        System.out.println("Ending Test Case 02");
+    }
+
+    @Test
+    public void testCase03() throws InterruptedException{
+        System.out.println("Beginning Test Case 03");
+
+        driver.get("https://www.flipkart.com/");
+        Wrappers.enterTextWrapper(driver, By.xpath("//input[@title='Search for Products, Brands and More']"), "Coffee Mug");
+        Thread.sleep(3000);
+        Wrappers.clickOnElementWapper(driver, By.xpath("//div[contains(text(),'4★ & above')]"));
+        Thread.sleep(3000);
+        Boolean status = Wrappers.printTitleAndImageUrlOfCoffeeMug(driver, By.xpath("//div[@class='slAVV4']//span[@class='Wphh3N']"));
+        Assert.assertTrue(status);
+
+        System.out.println("Ending Test Case 03");
     }
 
     @AfterTest
